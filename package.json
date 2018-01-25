@@ -1,0 +1,19 @@
+{
+  "name": "express-demo-2",
+  "version": "1.0.0",
+  "description": "Practice organizing an Express application and using middleware",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://shepherdjerred@github.com/ShepherdJerred-homework/express-demo-2.git"
+  },
+  "author": "Jerred Shepherd",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/ShepherdJerred-homework/express-demo-2/issues"
+  },
+  "homepage": "https://github.com/ShepherdJerred-homework/express-demo-2#readme"
+}

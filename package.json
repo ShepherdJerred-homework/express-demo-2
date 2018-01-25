@@ -4,7 +4,10 @@
   "description": "Practice organizing an Express application and using middleware",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "mocha",
+    "lint": "eslint src/"
   },
   "repository": {
     "type": "git",
@@ -15,5 +18,18 @@
   "bugs": {
     "url": "https://github.com/ShepherdJerred-homework/express-demo-2/issues"
   },
-  "homepage": "https://github.com/ShepherdJerred-homework/express-demo-2#readme"
+  "homepage": "https://github.com/ShepherdJerred-homework/express-demo-2#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "morgan": "^1.9.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "exlint": "^0.1.6",
+    "mocha": "^5.0.0",
+    "nodemon": "^1.14.11",
+    "semistandard": "^12.0.0"
+  }
 }

@@ -8,11 +8,11 @@ const config = require('../config');
 
 const app = express();
 
-// app.use(morgan('dev'));
+app.use(morgan('dev'));
 app.use(expressSession({
   secret: config.sessionSecret,
-  saveUninitialized: true,
-  resave: true
+  saveUninitialized: false,
+  resave: false
 }));
 app.use(bodyParser.urlencoded({ extended: true }));
 

@@ -1,8 +1,8 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const app = require('../src/index');
+require('../src/index');
 
-var expect = chai.expect;
+const expect = chai.expect;
 let url = 'http://localhost:8000';
 
 chai.use(chaiHttp);
@@ -11,6 +11,12 @@ describe('Static Files', () => {
   it('Should load static files correctly', () => {
     chai.request(url)
       .get('/index.html')
+      .then(res => {
+        expect(res.status).to.equal(200);
+      })
+      .catch(err => err.response);
+    chai.request(url)
+      .get('/login.html')
       .then(res => {
         expect(res.status).to.equal(200);
       })

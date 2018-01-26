@@ -23,6 +23,7 @@ app.post('/login', (req, res) => {
   if (login) {
     res.redirect('/');
   } else {
+    res.status(401);
     res.redirect('/login.html');
   }
 });
@@ -31,6 +32,7 @@ app.use('/private', (req, res, next) => {
   if (req.session.login) {
     next();
   } else {
+    res.status(401);
     res.redirect('/');
   }
 });

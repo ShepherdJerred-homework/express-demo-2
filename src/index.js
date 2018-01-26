@@ -8,12 +8,13 @@ const config = require('../config');
 
 const app = express();
 
-app.use(morgan('dev'));
-app.use(bodyParser.urlencoded());
+// app.use(morgan('dev'));
 app.use(expressSession({
   secret: config.sessionSecret,
-  cookie: {}
+  saveUninitialized: true,
+  resave: true
 }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/login', (req, res) => {
   let username = req.body.username;
@@ -21,10 +22,9 @@ app.post('/login', (req, res) => {
   let login = config.passwords[username] === password;
   req.session.login = login;
   if (login) {
-    res.redirect('/');
+    res.redirect('/index.html');
   } else {
-    res.status(401);
-    res.redirect('/login.html');
+    res.redirect(401, '/login.html');
   }
 });
 
@@ -32,11 +32,10 @@ app.use('/private', (req, res, next) => {
   if (req.session.login) {
     next();
   } else {
-    res.status(401);
-    res.redirect('/');
+    res.redirect(401, '/index.html');
   }
 });
 
 app.use(express.static(path.join(__dirname, '../static')));
 
-app.listen(config.serverPort, () => console.log('Listening on port 8000...'));
+app.listen(config.serverPort, () => console.log('Listening on port ' + config.serverPort + '...'));

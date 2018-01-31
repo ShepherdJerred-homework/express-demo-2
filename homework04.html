@@ -1,0 +1,82 @@
+
+<!-- saved from url=(0061)https://cs.harding.edu/gfoust/classes/comp431/homework04.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="./homework04_files/standard.css" type="text/css">
+    <title>Comp 431: Homework</title>
+    <!--<base target="_top">--><base href="." target="_top">
+    <style>
+      h3 { margin: 0 0 1em 0; }
+    </style>
+  <style></style></head>
+  <body>
+    <p>
+      Create a complete Express application.
+    </p>
+    <ol class="spaced">
+      <li>It should be a package following the conventions we established in
+        the previous homeworks.</li>
+      <li>You should use the organization discussed in class.  In particular
+        <ul>
+          <li>You should have a <code>lib/config</code> module which exports
+            configuration information
+            <ul>
+              <li>You should have a <code>serverPort</code> property for the
+                port to listen on</li>
+              <li>You should have a <code>sessionSecret</code> property for
+                the session secret</li>
+              <li>You should have a <code>passwords</code> property which
+                contains a dictionary of username/passwords (the property
+                name is the username, the property value is the password).</li>
+              <li>You do <em>not</em> have to have different configurations
+                for different environments</li>
+            </ul>
+          </li>
+          <li>You should have a <code>lib/app</code> module which exports the
+            Express application</li>
+        </ul>
+      </li>
+      <li>Use the following middleware
+        <ul>
+          <li><code>morgan</code> for logging</li>
+          <li><code>express.static</code> for static files; static files
+            should be stored in your <code>static/</code> directory</li>
+          <li><code>body-parser</code> to parse POST requests</li>
+          <li><code>express-session</code> for sessions; you may use a memory
+            store or a file store</li>
+        </ul>
+      </li>
+      <li>Create an <code>index.html</code> in your static directory.  This
+        should be what the user sees when he enters the
+        url <code>http://localhost:8000/</code>.  The web page should
+        include the text
+        <pre>Hello, Express!</pre>
+      </li>
+      <li>Create a POST handler for the url <code>/login</code>.  The handler
+        should do the following:
+        <ul>
+          <li>Look in the POST data for a <code>username</code> and
+            a <code>password</code> parameter</li>
+          <li>Check the username and password using
+            the <code>passwords</code> property of the config object</li>
+          <li>If they match, set <code>login=true</code> for the session and
+            redirect the user to "<code>/</code>"</li>
+          <li>If they do not match, set <code>login=false</code> for the
+            session and redirect the user to "<code>/login.html</code>"</li>
+        </ul>
+      </li>
+      <li>Create a <code>login.html</code> in your static directory.  This
+        page should have a form that POSTs to <code>/login</code> with a
+        place for the user to enter his username and password.</li>
+      <li>Create a handler for any URL beginnnig with <code>/private</code>.
+        The handler should check the session to see if <code>login ==
+        true</code>.  If not, it should redirect to <code>/login.html</code>.
+        If so, it should call the next middleware function.
+      </li>
+      <li>Create a <code>private/secret.html</code> file in your static
+        directory.  The web page should include the text
+        <pre>It's a secret to everybody</pre>
+      </li>
+    </ol>
+  
+
+</body></html>

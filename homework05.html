@@ -1,0 +1,165 @@
+
+<!-- saved from url=(0061)https://cs.harding.edu/gfoust/classes/comp431/homework05.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="./homework05_files/standard.css" type="text/css">
+    <title>Comp 431: Homework</title>
+    <!--<base target="_top">--><base href="." target="_top">
+    <script type="text/javascript" src="./homework05_files/shCore.js"></script><style></style>
+    <script type="text/javascript" src="./homework05_files/shBrushJScript.js"></script>
+    <script type="text/javascript" src="./homework05_files/shBrushXml.js"></script>
+    <script type="text/javascript">
+      SyntaxHighlighter.defaults.gutter = false;
+      SyntaxHighlighter.all();
+    </script>
+    <link type="text/css" rel="stylesheet" href="./homework05_files/shCore.css">
+    <link type="text/css" rel="stylesheet" href="./homework05_files/shThemeFoust.css">
+  </head>
+  <body>
+    <p>
+      You are to augment your Express application
+      from <a href="https://cs.harding.edu/gfoust/classes/comp431/homework04.html">homework 4</a>.
+    </p>
+    <p>
+      For this homework you will write a guessing game for the
+      URL <code>/guess</code>.  The first time you visit the game it will pick
+      a secret which is a random number between 1 and 1000.  You try to guess
+      the secret.  Each time you guess the game tells you whether your guess
+      is too high, too low, or correct.  When you get it right, it tells you
+      your score (how many guesses it took you).  When you visit the game
+      again, it resets.
+    </p>
+    <p>
+      You will store all the data needed to play the game in a session.  You
+      should store the following pieces of data:
+    </p>
+    <ul>
+      <li><code>secret</code> — the secret number selected by the
+        game</li>
+      <li><code>guesses</code> — an array of all the guesses made by
+        the player so far in the game</li>
+    </ul>
+<!--       <li>When testing an application, it is important to consider how it -->
+<!--         performs in less-than-ideal circumstances&mdash;for example, slow -->
+<!--         network connection speeds. -->
+<!--         <ol> -->
+<!--           <li> -->
+<!--             <p> -->
+<!--               You are to make a function named <code>delay</code> which -->
+<!--               returns a middleware function that slows down the handling of -->
+<!--               the request: simply wait for a period of time, then call -->
+<!--               the <code>next()</code> function to continue the response. -->
+<!--               The <code>delay</code> function should take one parameter: the -->
+<!--               number of seconds the returned middleware function should delay -->
+<!--               the response.  For example, the following would register a -->
+<!--               middleware function that delays the response for 2 seconds. -->
+<!--             </p> -->
+<!--             <pre class="example">app.use("/test", delay(2));</pre> -->
+<!--             <p> -->
+<!--               You can create the delay using -->
+<!--               the <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout">setTimeout</a></code> -->
+<!--               function.  This function takes a function and a delay (in -->
+<!--               milliseconds) and calls the function after the delay.  For -->
+<!--               example, the following code waits two seconds, then prints -->
+<!--               "Hello, world!" to the console. -->
+<!--             </p> -->
+<!--             <pre class="example"> -->
+<!-- setTimeout(() =&gt; console.log( "Hello, world!" ), 2000); -->
+<!-- </pre> -->
+<!--           </li> -->
+<!--           <li> -->
+<!--             Make a file named <code>slow.html</code> in -->
+<!--             your <code>static</code> directory.  This should be a simple HTML -->
+<!--             file which contains the text, "Hello, slow world!" -->
+<!--             <p> -->
+<!--               Use your <code>delay</code> function from problem 2 to delay -->
+<!--               this page by 2 seconds.  Thus, when you go to the -->
+<!--               url <code>/slow.html</code> it should take 2 seconds to -->
+<!--               load, then say, "Hello, slow world!". -->
+<!--             </p> -->
+<!--           </li> -->
+<!--         </ol> -->
+<!--       </li> -->
+    <ol class="spaced">
+      <li>
+        Write a GET and POST handler for the URL <code>/guess</code>.  (I
+        suggest that you
+        use <code><a href="http://expressjs.com/en/4x/api.html#app.all">app.all()</a></code>
+        to register a handler for all request methods.)  It should generate an
+        HTML web page.  Parts of the web page will be different depending on
+        data stored in the session.  The basic form of the page is as follows:
+        <div><div id="highlighter_633968" class="syntaxhighlighter nogutter  xml"><div class="toolbar"><span><a href="https://cs.harding.edu/gfoust/classes/comp431/homework05.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="xml plain">&lt;!</code><code class="xml special">DOCTYPE</code> <code class="xml plain">html&gt;</code></div><div class="line number2 index1 alt1"><code class="xml plain">&lt;</code><code class="xml keyword">html</code><code class="xml plain">&gt;</code></div><div class="line number3 index2 alt2"><code class="xml spaces">&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">head</code><code class="xml plain">&gt;</code></div><div class="line number4 index3 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">title</code><code class="xml plain">&gt;Guess my secret!&lt;/</code><code class="xml keyword">title</code><code class="xml plain">&gt;</code></div><div class="line number5 index4 alt2"><code class="xml spaces">&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">head</code><code class="xml plain">&gt;</code></div><div class="line number6 index5 alt1"><code class="xml spaces">&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">body</code><code class="xml plain">&gt;</code></div><div class="line number7 index6 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">h1</code><code class="xml plain">&gt;Guess my secret!&lt;/</code><code class="xml keyword">h1</code><code class="xml plain">&gt;</code></div><div class="line number8 index7 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">form</code> <code class="xml color1">method</code><code class="xml plain">=</code><code class="xml string">"POST"</code><code class="xml plain">&gt;</code></div><div class="line number9 index8 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">label</code> <code class="xml color1">for</code><code class="xml plain">=</code><code class="xml string">"guess"</code><code class="xml plain">&gt;Guess:&lt;/</code><code class="xml keyword">label</code><code class="xml plain">&gt;</code></div><div class="line number10 index9 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">input</code> <code class="xml color1">type</code><code class="xml plain">=</code><code class="xml string">"text"</code> <code class="xml color1">id</code><code class="xml plain">=</code><code class="xml string">"guess"</code> <code class="xml color1">name</code><code class="xml plain">=</code><code class="xml string">"guess"</code><code class="xml plain">/&gt;</code></div><div class="line number11 index10 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">input</code> <code class="xml color1">type</code><code class="xml plain">=</code><code class="xml string">"submit"</code> <code class="xml color1">value</code><code class="xml plain">=</code><code class="xml string">"Go"</code><code class="xml plain">/&gt;</code></div><div class="line number12 index11 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">form</code><code class="xml plain">&gt;</code></div><div class="line number13 index12 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">div</code> <code class="xml color1">id</code><code class="xml plain">=</code><code class="xml string">"correct"</code><code class="xml plain">&gt;</code></div><div class="line number14 index13 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">p</code><code class="xml plain">&gt;You got it!&nbsp; It took you 9 guesses.&lt;</code><code class="xml keyword">p</code><code class="xml plain">&gt;</code></div><div class="line number15 index14 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">a</code> <code class="xml color1">href</code><code class="xml plain">=</code><code class="xml string">"guesss"</code><code class="xml plain">&gt;Play again&lt;/</code><code class="xml keyword">a</code><code class="xml plain">&gt;</code></div><div class="line number16 index15 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">div</code><code class="xml plain">&gt;</code></div><div class="line number17 index16 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">div</code> <code class="xml color1">id</code><code class="xml plain">=</code><code class="xml string">"guesses"</code><code class="xml plain">&gt;</code></div><div class="line number18 index17 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">Here are your previous guesses</code></div><div class="line number19 index18 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">table</code><code class="xml plain">&gt;</code></div><div class="line number20 index19 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">tr</code><code class="xml plain">&gt;</code></div><div class="line number21 index20 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">td</code><code class="xml plain">&gt;123&lt;/</code><code class="xml keyword">td</code><code class="xml plain">&gt;</code></div><div class="line number22 index21 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">td</code><code class="xml plain">&gt;Too low&lt;/</code><code class="xml keyword">td</code><code class="xml plain">&gt;</code></div><div class="line number23 index22 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">tr</code><code class="xml plain">&gt;</code></div><div class="line number24 index23 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">tr</code><code class="xml plain">&gt;</code></div><div class="line number25 index24 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">td</code><code class="xml plain">&gt;456&lt;/</code><code class="xml keyword">td</code><code class="xml plain">&gt;</code></div><div class="line number26 index25 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">td</code><code class="xml plain">&gt;Too low&lt;/</code><code class="xml keyword">td</code><code class="xml plain">&gt;</code></div><div class="line number27 index26 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">tr</code><code class="xml plain">&gt;</code></div><div class="line number28 index27 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">tr</code><code class="xml plain">&gt;</code></div><div class="line number29 index28 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">td</code><code class="xml plain">&gt;789&lt;/</code><code class="xml keyword">td</code><code class="xml plain">&gt;</code></div><div class="line number30 index29 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">td</code><code class="xml plain">&gt;Too high&lt;/</code><code class="xml keyword">td</code><code class="xml plain">&gt;</code></div><div class="line number31 index30 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">tr</code><code class="xml plain">&gt;</code></div><div class="line number32 index31 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">table</code><code class="xml plain">&gt;</code></div><div class="line number33 index32 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">div</code><code class="xml plain">&gt;</code></div><div class="line number34 index33 alt1"><code class="xml spaces">&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">body</code><code class="xml plain">&gt;</code></div><div class="line number35 index34 alt2"><code class="xml plain">&lt;/</code><code class="xml keyword">html</code><code class="xml plain">&gt;</code></div></div></td></tr></tbody></table></div></div>
+        <ul class="spaced">
+          <li>
+            It should not show the <code>&lt;form&gt;</code> if the last guess
+            of <code>guesses</code> is equal to the <code>secret</code>.
+          </li>
+          <li>
+            It should only show the <code>&lt;div id="correct"&gt;</code> if the last guess
+            of <code>guesses</code> is equal to the <code>secret</code>.  In
+            this case, the number of guesses would be the length of
+            the <code>guesses</code> array.
+          </li>
+          <li>
+            It should only show the <code>&lt;div id="guesses"&gt;</code> if
+            the <code>guesses</code> array is not empty.
+            <ul>
+              <li>The rows of the table should correspond to the elements of
+                the <code>guesses</code> array <em>in reverse order</em>; i.e.,
+                the most recent guess first</li>
+              <li>Each guess should be labeled as "Too low" if it is less
+                than the secret, or "Too high" if it is greater than the secret</li>
+            </ul>
+          </li>
+        </ul>
+        <p>
+          I suggest you build up this HTML string piece by piece.  For example,
+          you might first define a variable that holds the string for one of the
+          &lt;div&gt; tags, like so:
+        </p>
+        <div><div id="highlighter_712258" class="syntaxhighlighter nogutter  jscript"><div class="toolbar"><span><a href="https://cs.harding.edu/gfoust/classes/comp431/homework05.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="jscript keyword">let</code> <code class="jscript plain">$correctDiv;</code></div><div class="line number2 index1 alt1"><code class="jscript keyword">if</code> <code class="jscript plain">(</code><code class="jscript comments">/* last guess == secret */</code><code class="jscript plain">) {</code></div><div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;</code><code class="jscript plain">$correctDiv =</code></div><div class="line number4 index3 alt1"><code class="jscript string">`&nbsp;&nbsp;&nbsp; &lt;div id="correct"&gt;</code></div><div class="line number5 index4 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="jscript string">&lt;p&gt;You got it!&lt;/p&gt;</code></div><div class="line number6 index5 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="jscript string">&lt;/div&gt;</code></div><div class="line number7 index6 alt2"><code class="jscript string">`</code><code class="jscript plain">;</code></div><div class="line number8 index7 alt1"><code class="jscript plain">}</code></div><div class="line number9 index8 alt2"><code class="jscript keyword">else</code> <code class="jscript plain">{</code></div><div class="line number10 index9 alt1"><code class="jscript spaces">&nbsp;&nbsp;</code><code class="jscript plain">$correctDiv = </code><code class="jscript string">""</code><code class="jscript plain">;</code></div><div class="line number11 index10 alt2"><code class="jscript plain">}</code></div></div></td></tr></tbody></table></div></div>
+        Then you can include those smaller pieces in a larger string.
+        <div><div id="highlighter_164578" class="syntaxhighlighter nogutter  jscript"><div class="toolbar"><span><a href="https://cs.harding.edu/gfoust/classes/comp431/homework05.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="jscript plain">res.send(</code><code class="jscript string">`</code></div><div class="line number2 index1 alt1"><code class="jscript string">&lt;html&gt;</code></div><div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;</code><code class="jscript string">...</code></div><div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;</code><code class="jscript string">&lt;h1&gt;Guess my secret!&lt;/h1&gt;</code></div><div class="line number5 index4 alt2"><code class="jscript string">${form}</code></div><div class="line number6 index5 alt1"><code class="jscript string">${correctDiv}</code></div><div class="line number7 index6 alt2"><code class="jscript string">${guessesDiv}</code></div><div class="line number8 index7 alt1"><code class="jscript string">&lt;/html&gt;</code></div><div class="line number9 index8 alt2"><code class="jscript string">`</code><code class="jscript plain">);</code></div></div></td></tr></tbody></table></div></div>
+        <p>
+          Remember that you can also concatenate strings
+          using <code>+</code>.  You can also concatenate all the strings in
+          an array using the <code>Array.join()</code> function.  The
+          parameter is a string that gets interpolated throughout the list.
+        </p>
+        <div><div id="highlighter_265548" class="syntaxhighlighter nogutter  jscript"><div class="toolbar"><span><a href="https://cs.harding.edu/gfoust/classes/comp431/homework05.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="jscript keyword">let</code> <code class="jscript plain">colors = [</code><code class="jscript string">"red"</code><code class="jscript plain">, </code><code class="jscript string">"green"</code><code class="jscript plain">, </code><code class="jscript string">"blue"</code><code class="jscript plain">];</code></div><div class="line number2 index1 alt1">&nbsp;</div><div class="line number3 index2 alt2"><code class="jscript plain">console.log(colors.join(</code><code class="jscript string">", "</code><code class="jscript plain">));&nbsp; </code><code class="jscript comments">// Prints "red, green, blue"</code></div><div class="line number4 index3 alt1">&nbsp;</div><div class="line number5 index4 alt2"><code class="jscript plain">console.log(colors.join(</code><code class="jscript string">""</code><code class="jscript plain">));&nbsp;&nbsp;&nbsp; </code><code class="jscript comments">// Prints "redgreenblue"</code></div></div></td></tr></tbody></table></div></div>
+      </li>
+      <li>
+        Write a POST handler for the URL <code>/guess</code>.  It should check
+        to see if the post data contains a variable named <code>guess</code>
+        which is a valid number.  POST data are always strings, but you can
+        convert a string to a number using the <code>Number</code> function.
+        If the string is not a valid number then you will get the
+        number <code>NaN</code> (Not a Number).  You can test for this with
+        the <code>isNaN</code> function.
+        <div><div id="highlighter_72134" class="syntaxhighlighter nogutter  jscript"><div class="toolbar"><span><a href="https://cs.harding.edu/gfoust/classes/comp431/homework05.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="jscript keyword">let</code> <code class="jscript plain">s = getSomeString();</code></div><div class="line number2 index1 alt1"><code class="jscript keyword">let</code> <code class="jscript plain">n = Number(s);</code></div><div class="line number3 index2 alt2"><code class="jscript keyword">if</code> <code class="jscript plain">(isNaN(n)) {</code></div><div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;</code><code class="jscript plain">console.log(</code><code class="jscript string">"Not a valid number"</code><code class="jscript plain">);</code></div><div class="line number5 index4 alt2"><code class="jscript plain">}</code></div><div class="line number6 index5 alt1"><code class="jscript keyword">else</code> <code class="jscript plain">{</code></div><div class="line number7 index6 alt2"><code class="jscript spaces">&nbsp;&nbsp;</code><code class="jscript plain">console.log(</code><code class="jscript string">"Valid number"</code><code class="jscript plain">);</code></div><div class="line number8 index7 alt1"><code class="jscript plain">}</code></div></div></td></tr></tbody></table></div></div>
+        If it is a valid number then add it to the end of
+        the <code>guesses</code> array in the session.
+      </li>
+      <li>
+        Write a GET and POST handler for the URL <code>/guess</code>.  (I
+        suggest that you
+        use <code><a href="http://expressjs.com/en/4x/api.html#app.all">app.all()</a></code>
+        to register a handler for all request methods.)  The handler should
+        check to see if either (1) the session does not contain a secret, or
+        (2) the last guess of <code>guesses</code> is equal to
+        the <code>secret</code>.  If either of those is true, you should do
+        the following:
+        <ul>
+          <li>
+            Pick a new secret number between 1 and 1000.  You can do this like
+            so:
+            <div><div id="highlighter_223884" class="syntaxhighlighter nogutter  javascript"><div class="toolbar"><span><a href="https://cs.harding.edu/gfoust/classes/comp431/homework05.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="javascript keyword">let</code> <code class="javascript plain">p = Math.random();&nbsp; </code><code class="javascript comments">// Gives random floating-point number in the range [0, 1)</code></div><div class="line number2 index1 alt1">&nbsp;</div><div class="line number3 index2 alt2"><code class="javascript keyword">let</code> <code class="javascript plain">n = p * 1000;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="javascript comments">// Gives random floating-point number in the range [0, 1000)</code></div><div class="line number4 index3 alt1">&nbsp;</div><div class="line number5 index4 alt2"><code class="javascript keyword">let</code> <code class="javascript plain">i = Math.floor(n);&nbsp; </code><code class="javascript comments">// Gives random integer in the range [0, 999];</code></div><div class="line number6 index5 alt1">&nbsp;</div><div class="line number7 index6 alt2"><code class="javascript keyword">let</code> <code class="javascript plain">secret = i + 1;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="javascript comments">// Gives random integer in the range [1, 1000];</code></div></div></td></tr></tbody></table></div></div>
+          </li>
+          <li>
+            Set <code>guesses</code> to an empty array.
+          </li>
+        </ul>
+      </li>
+    </ol>
+  
+
+</body></html>
